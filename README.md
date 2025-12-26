@@ -1,6 +1,11 @@
 neupan
 neupan部署仿真实验
 
+克隆代码
+```bash
+gitclone https://github.com/HeisenberrrRg/neupan.git
+```
+
 创建虚拟环境（ Prerequisite- Python >= 3.10）
 ```bash
 cd neupan
