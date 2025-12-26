@@ -27,7 +27,6 @@ pip3 install "numpy<2.0" scipy matplotlib pyyaml
 
 安装NeuPAN
 ```bash
-cd ..
 cd NeuPAN
 pip install -e .
 ```
