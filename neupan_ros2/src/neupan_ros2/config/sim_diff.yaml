@@ -1,0 +1,51 @@
+# NeuPAN Simulation Configuration
+# Configuration for ddr_minimal_sim simulator integration
+
+neupan_node:
+  ros__parameters:
+    use_sim_time: true
+    # ========== Core Performance Settings (Critical Fixes) ==========
+    control_frequency: 10.0      # 【修改】从50Hz降到10Hz，解决转圈和延迟问题
+    device: 'cuda'               # 【新增】强制开启显卡加速
+
+    # ========== NeuPAN Configuration Files ==========
+    neupan_config_file: 'neupan_sim_diff.yaml'  # Planner configuration
+    dune_checkpoint_file: 'model_5000.pth'       # Neural network model
+
+    # ========== TF Frame Configuration (Adapted for Simulator) ==========
+    map_frame: 'map'           # Global map coordinate frame
+    base_frame: 'base_link'    # Robot base frame (matches ddr_minimal_sim)
+    lidar_frame: 'base_link'   # LiDAR frame (matches ddr_minimal_sim)
+
+    # ========== Visualization Configuration ==========
+    enable_visualization: true    # 【建议】开启可视化，方便在Rviz看预测轨迹
+    enable_dune_markers: true    # Enable DUNE point cloud markers
+    enable_nrmp_markers: true    # Enable NRMP point cloud markers
+    enable_robot_marker: true    # Enable robot footprint marker
+    marker_size: 0.05            # DUNE/NRMP point marker size
+    marker_z: 0.3                # Robot marker height (adapted for small robot)
+
+    # ========== Laser Scan Processing Configuration ==========
+    scan_angle_max: 3.14       # Maximum scan angle (180 degrees)
+    scan_angle_min: -3.14      # Minimum scan angle (-180 degrees)
+    scan_downsample: 5         # 【修改】从1改为5，降低点云密度，大幅减少计算量
+    scan_range_max: 5.0        # Maximum scan distance (meters)
+    scan_range_min: 0.01       # Minimum scan distance (meters)
+
+    # ========== Path Planning Configuration ==========
+    flip_angle: false                       # Whether to flip scan angles
+    refresh_initial_path: true              # Refresh path when receiving new path
+    include_initial_path_direction: false   # Use point gradient to calculate direction
+
+    # ========== Topic Configuration (Optional) ==========
+    # Uncomment and modify to customize topic names for integration
+    # cmd_vel_topic: '/neupan_cmd_vel'        # Velocity command output
+    # scan_topic: '/scan'                     # Laser scan input
+    # plan_input_topic: '/plan'               # Global path input
+    # goal_topic: '/goal_pose'                # Goal pose input
+    # plan_output_topic: '/neupan_plan'       # Optimized trajectory output
+    # ref_state_topic: '/neupan_ref_state'    # Reference state output
+    # initial_path_topic: '/neupan_initial_path'  # Initial path visualization
+    # dune_markers_topic: '/dune_point_markers'   # DUNE visualization
+    # robot_marker_topic: '/robot_marker'         # Robot footprint marker
+    # nrmp_markers_topic: '/nrmp_point_markers'   # NRMP visualization

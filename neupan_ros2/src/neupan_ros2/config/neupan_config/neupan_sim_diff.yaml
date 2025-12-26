@@ -1,0 +1,55 @@
+# mpc (模型预测控制)
+frequency: 10.0      # 【回归】10Hz 标准频率
+receding: 10
+step_time: 0.25      # 【回归】标准预测步长
+ref_speed: 0.25      # 【回归】0.25 m/s 稳健低速
+device: 'cuda'
+time_print: False
+collision_threshold: -0.15 
+
+# robot (机器人尺寸)
+robot:
+  kinematics: 'diff'
+  max_speed: [0.5, 1.0]  # 回归保守的物理限制
+  max_acce: [0.5, 1.0]   # 回归温柔的加减速
+  
+  # 【安全策略】
+  # 设为 0.60。
+  # 实际车长约 0.50。多出的 10cm 是为了抵消惯性，保证不蹭墙。
+  length: 0.60       
+  width: 0.45
+
+# initial path (路径搜索)
+ipath:
+  interval: 0.2
+  curve_style: 'line'
+  min_radius: 0.05
+  loop: True
+  arrive_threshold: 0.3
+  close_threshold: 0.1
+  arrive_index_threshold: 3
+
+# pan (求解器)
+pan:
+  # 保持 20 次迭代，算得准
+  iter_num: 20
+  dune_max_num: 100
+  nrmp_max_num: 20
+  dune_checkpoint: None
+  iter_threshold: 0.05
+
+# adjust (避障核心)
+adjust:
+  q_s: 0.1
+  p_u: 1.0
+  
+  # 【防崩溃核心】
+  # 保持 2.0。温和的力场，防止数学爆炸。
+  eta: 2.0             
+  
+  d_max: 0.1
+  
+  # 【防无解核心】
+  # 保持 0.02。极低的底线，防止算法死锁。
+  # 防撞任务主要靠上面的 robot width 和 length 完成。
+  d_min: 0.02
